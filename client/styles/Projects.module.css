@@ -1,0 +1,8 @@
+.heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top:10px;
+    padding-bottom:20px;
+    height: 100%;
+}
