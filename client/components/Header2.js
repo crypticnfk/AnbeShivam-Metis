@@ -13,7 +13,9 @@ import {
     loadBlockchainData,
     getAccountAddress,
     getGODSBalance,
-    getNetwork
+    getNetwork,
+    increaseGrant,
+    syncMatchedFunds
 } from "../utils/web3-utils";
 
 
@@ -62,6 +64,12 @@ export default function Header2() {
                         <Nav.Link href="#deets">{ godsBalance.toString() } GODS</Nav.Link>
                         <Nav.Link href="#deets">{ networkName }</Nav.Link>
                     </Nav>
+                    { account.toUpperCase() == "0x5Dcb9E94CB2f8334581BDB049D16F69c3290bd25".toUpperCase() &&
+                    <div>
+                        <button className="w3-button w3-black w3-padding-large w3-small w3-margin-top" onClick={increaseGrant}>Fund Grant Pool</button>
+                        <button className="w3-button w3-black w3-padding-large w3-small w3-margin-top" onClick={syncMatchedFunds}>Sync Matched Funds</button>
+                    </div>
+                    }
                 </Navbar.Collapse>
             </Container>
         </Navbar>

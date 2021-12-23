@@ -98,6 +98,7 @@ function Projects() {
         await investFunds(chosenProject.id, uri, amount);
         setLoading(false);
         window.alert("Successfully funded Project " + chosenProject.name);
+        window.location.href = "/nfts";
     }
 
     if (connected) {

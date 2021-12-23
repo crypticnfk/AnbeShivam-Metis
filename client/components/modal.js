@@ -23,7 +23,7 @@ function ProjectModal(props) {
                 </Modal.Header>
                 <center>
                 <br/>
-                <p style={{fontSize: 20, color: "crimson"}}>Funds Received: {(props.project.receivedFunds / 10**18).toFixed(2)} METIS</p>
+                <p style={{fontSize: 20, color: "crimson"}}>Funds Received in voting: {(props.project.receivedFunds / 10**18).toFixed(2)} METIS</p>
                 <p style={{fontSize: 20, color: "cornflowerblue"}}>Grant Funds: {(props.project.matchedFunds / 10**18).toFixed(2)} METIS</p>
                 <Modal.Body>
                 <h4>Project Pitch</h4>

@@ -154,13 +154,13 @@ export const getNFTs = async() => {
     }
   }
   return nfts;
-}
+};
 
 export const getFundingPools = async () => {
   const cPool = await AnbeShivam.methods.fundingPool().call();
   const mPool = await AnbeShivam.methods.matchingPool().call();
   return [web3.utils.fromWei(cPool), web3.utils.fromWei(mPool)];
-}
+};
 
 export const withdrawFunds = async (contentId) => {
   const account = await getAccountAddress();
@@ -175,4 +175,34 @@ export const withdrawFunds = async (contentId) => {
     .on("error", (error, receipt) => {
       window.alert("Error occured: ", error);
     });
-}
+};
+
+export const increaseGrant = async() => {
+  const account = await getAccountAddress();
+  await AnbeShivam.methods
+    .increaseMatchingPool()
+    .send({ from: account, value: web3.utils.toWei("2") })
+    .on("transactionHash", function (hash) {})
+    .on("receipt", function (receipt) {})
+    .on("confirmation", (confirmationNumber, receipt) => {
+      window.alert("Successfully added to Grant Funds pool");
+    })
+    .on("error", (error, receipt) => {
+      window.alert("Error occured: ", error);
+    });
+};
+
+export const syncMatchedFunds = async() => {
+  const account = await getAccountAddress();
+  await AnbeShivam.methods
+    .syncMatchedFunds()
+    .send({ from: account })
+    .on("transactionHash", function (hash) {})
+    .on("receipt", function (receipt) {})
+    .on("confirmation", (confirmationNumber, receipt) => {
+      window.alert("Successfully synced Matched Funds");
+    })
+    .on("error", (error, receipt) => {
+      window.alert("Error occured: ", error);
+    });
+};
