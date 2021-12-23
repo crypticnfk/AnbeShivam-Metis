@@ -39,12 +39,20 @@ export const connectAccount = async () => {
 
 export const loadBlockchainData = async() => {
   const networkId = await web3.eth.net.getId();
-  console.log(networkId)  
   
-  AnbeShivam = new web3.eth.Contract(AnbeShivamMain.abi, "0x5503A2E8DfE21BB3403303D603c8B407C8016e8A");
-  ASNFT = new web3.eth.Contract(AnbeShivamNFT.abi, "0x2C794e693B3Bc5714938541F34121A3448f431AE");
-  GODSToken = new web3.eth.Contract(AnbeShivamInvestorToken.abi, "0x9D3B98AA8A826d9196fE590EC86F36ee27429A9d");
-  return true;
+  const asMainData = AnbeShivamMain.networks[networkId];
+  const asNFTData = AnbeShivamNFT.networks[networkId];
+  const asGODSData = AnbeShivamInvestorToken.networks[networkId];
+
+  if(asMainData && asNFTData && asGODSData) {
+    AnbeShivam = new web3.eth.Contract(AnbeShivamMain.abi, asMainData.address);
+    ASNFT = new web3.eth.Contract(AnbeShivamNFT.abi, asNFTData.address);
+    GODSToken = new web3.eth.Contract(AnbeShivamInvestorToken.abi, asGODSData.address);
+    return true;
+  } else {
+    window.alert("Unidentified network, please connect to Alfajores Testnet");
+    return false;
+  }
 };
 
 export const getAccountAddress = async() => {
@@ -56,28 +64,18 @@ export const getAccountAddress = async() => {
 };
 
 export const getNetwork = async() => {
-  const networkId = await web3.eth.net.getId(); 
-  console.log("hi") 
-  if(networkId == 588) {
-    return "Metis";
-  } else if(networkId == 80001) {
-    return "Mumbai";
+  window.ethereum.on('chainChanged', () => {
+    window.location.reload()
+  })
+  const networkId = await web3.eth.net.getId();  
+  if(networkId == 42220) {
+    return "Celo";
+  } else if(networkId == 44787) {
+    return "Alfajores";
   } 
 
   return "Unidentified Network";
 };
-
-export const checkInvestor = async() => {
-  const account = await getAccountAddress();
-  const bl = await web3.eth.getBalance(account);
-  const balance = await web3.utils.fromWei(bl.toString());
-  const nfts = await getNFTBalance();
-  if(parseFloat(balance) > 0 || nfts > 0) {
-    return true;
-  } else {
-    return false;
-  }
-}
 
 export const getGODSBalance = async() => {
   const account = await getAccountAddress();
@@ -97,12 +95,14 @@ export const getTokenURI = async(tokenId) => {
   return uri;
 };
 
-export const getProjectNames = async() => {
+export const getProjects = async() => {
   let projects = [];
   const pCount = await AnbeShivam.methods.returnContentCount().call();
   for(var i = 0; i < pCount; ++i) {
-    const project = await AnbeShivam.methods.projects(i).call();
-    projects.push(project);
+    const project = await AnbeShivam.methods.contents(i).call();
+    if(project.isListed) {
+      projects.push(project);
+    }
   }
   return projects;
 }
@@ -112,7 +112,8 @@ export const addContent = async(projectName, fileURL) => {
   await AnbeShivam.methods
     .addContent(projectName, fileURL)
     .send({
-      from: account
+      from: account,
+      value: web3.utils.toWei("2", "ether")
     })
     .on("transactionHash", function (hash) {})
     .on("receipt", function (receipt) {})
@@ -123,32 +124,6 @@ export const addContent = async(projectName, fileURL) => {
       window.alert("Error occured: ", error);
     });
 };
-
-export const returnContent = async(projectId) => {
-  const account = await getAccountAddress();
-  let result = false;
-  await AnbeShivam.methods
-    .returnContent(projectId)
-    .send({
-      from: account
-    })
-    .on("transactionHash", function (hash) {})
-    .on("receipt", async function (receipt) {
-      result = await receipt.events.viewedContent.returnValues[0];
-    })
-    .on("confirmation", (confirmationNumber, receipt) => {})
-    .on("error", (error, receipt) => {
-      window.alert("Error occured while accessing content");
-      result = false;
-    });
-
-    return result;
-};
-
-/*export const returnProjectCount = async() => {
-  const projectCount = await AnbeShivam.methods.returnContentCount().call();
-  return projectCount;
-};*/
 
 export const investFunds = async(contentId, metadata, amount) => {
   const account = await getAccountAddress();
@@ -181,34 +156,23 @@ export const getNFTs = async() => {
   return nfts;
 }
 
-export const fetchLatestPrice = async() => {
-  const networkId = await web3.eth.net.getId();
+export const getFundingPools = async () => {
+  const cPool = await AnbeShivam.methods.fundingPool().call();
+  const mPool = await AnbeShivam.methods.matchingPool().call();
+  return [web3.utils.fromWei(cPool), web3.utils.fromWei(mPool)];
+}
 
-  if(networkId === 80001) {
-      try {
-          const aggregatorV3InterfaceABI = [{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"description","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint80","name":"_roundId","type":"uint80"}],"name":"getRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"latestRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
-          const addr = "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada";
-          const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, addr);
-          const roundData = await priceFeed.methods.latestRoundData().call();
-          const roundPrice = roundData.answer/10**8;
-          return roundPrice;
-      } catch(e) {
-          console.log("Error while fetching price: ", e);
-      }
-  } 
-
-  else if(networkId === 137) {
-      try {
-          const aggregatorV3InterfaceABI = [{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"description","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint80","name":"_roundId","type":"uint80"}],"name":"getRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"latestRoundData","outputs":[{"internalType":"uint80","name":"roundId","type":"uint80"},{"internalType":"int256","name":"answer","type":"int256"},{"internalType":"uint256","name":"startedAt","type":"uint256"},{"internalType":"uint256","name":"updatedAt","type":"uint256"},{"internalType":"uint80","name":"answeredInRound","type":"uint80"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
-          const addr = "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0";
-          const priceFeed = new web3.eth.Contract(aggregatorV3InterfaceABI, addr);
-          const roundData = await priceFeed.methods.latestRoundData().call();
-          const roundPrice = roundData.answer/10**8;
-          return roundPrice;
-      } catch(e) {
-          console.log("Error while fetching price: ", e);
-      }
-  } 
-
-  return 1.3;
-};
+export const withdrawFunds = async (contentId) => {
+  const account = await getAccountAddress();
+  await AnbeShivam.methods
+    .withdrawFunds(contentId)
+    .send({ from: account })
+    .on("transactionHash", function (hash) {})
+    .on("receipt", function (receipt) {})
+    .on("confirmation", (confirmationNumber, receipt) => {
+      window.alert("Successfully withdrew Funds");
+    })
+    .on("error", (error, receipt) => {
+      window.alert("Error occured: ", error);
+    });
+}
