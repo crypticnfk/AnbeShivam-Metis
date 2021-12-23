@@ -5,6 +5,10 @@ import AnbeShivamInvestorToken from  "../abis/AnbeShivamInvestorToken.json";
 
 let web3, AnbeShivam, ASNFT, GODSToken;
 
+const ASMainAddress = "0x6A17D1b1E31A8473Fccf21b7FAB82757139520f1";
+const ASTokenAddress = "0x0201049b94d6c407bB71745F5Adb8e329b4b39F8";
+const ASNFTAddress = "0x4304EbCb0C6A37D289852aE21Ef5DFc64C5D0573";
+
 export const loadWeb3 = async () => {
   try {
     if (window.ethereum) {
@@ -38,19 +42,15 @@ export const connectAccount = async () => {
 };
 
 export const loadBlockchainData = async() => {
-  const networkId = await web3.eth.net.getId();
-  
-  const asMainData = AnbeShivamMain.networks[networkId];
-  const asNFTData = AnbeShivamNFT.networks[networkId];
-  const asGODSData = AnbeShivamInvestorToken.networks[networkId];
+  const networkId = await web3.eth.net.getId();;
 
-  if(asMainData && asNFTData && asGODSData) {
-    AnbeShivam = new web3.eth.Contract(AnbeShivamMain.abi, asMainData.address);
-    ASNFT = new web3.eth.Contract(AnbeShivamNFT.abi, asNFTData.address);
-    GODSToken = new web3.eth.Contract(AnbeShivamInvestorToken.abi, asGODSData.address);
+  if(networkId == 588) {
+    AnbeShivam = new web3.eth.Contract(AnbeShivamMain.abi, ASMainAddress);
+    ASNFT = new web3.eth.Contract(AnbeShivamNFT.abi, ASNFTAddress);
+    GODSToken = new web3.eth.Contract(AnbeShivamInvestorToken.abi, ASTokenAddress);
     return true;
   } else {
-    window.alert("Unidentified network, please connect to Alfajores Testnet");
+    window.alert("Unidentified network, please connect to Stardust Testnet");
     return false;
   }
 };
@@ -68,10 +68,10 @@ export const getNetwork = async() => {
     window.location.reload()
   })
   const networkId = await web3.eth.net.getId();  
-  if(networkId == 42220) {
-    return "Celo";
-  } else if(networkId == 44787) {
-    return "Alfajores";
+  if(networkId == 1088) {
+    return "Andromeda Mainnet";
+  } else if(networkId == 588) {
+    return "Stardust Testnet";
   } 
 
   return "Unidentified Network";

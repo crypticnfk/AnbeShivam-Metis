@@ -1,27 +1,24 @@
-
 # AnbeShivam
 
-A decentralized and completely transparent project funding platform which allows only accredited investors to access the platform content
-
+A decentralized and completely transparent project funding platform which allows only accredited investors to access the platform content.
 
 ## Tech Stack Used
 
 - Truffle Suite
 - Next js
-- ganache
 - IPFS
-- openzeppelin
+- OpenZeppelin Contracts
 - react-bootstrap
 
 ## AnbeShivam Smart Contract Deployments
 
-**Mumbai**
+**Stardust Testnet**
 
 | Contract | Deployed address  |
 | :----- | :- |
-| [AnbeShivamMain Contract](https://mumbai.polygonscan.com/address/0x6C5452e7822c82af4ee38041f4749EdaBfaa2F79) | `0x6C5452e7822c82af4ee38041f4749EdaBfaa2F79` |
-| [GODS Token Contract](https://mumbai.polygonscan.com/token/0xFfFcC7aFa25fC131e54c4E194eC9D97eAA1C62d9) | `0xFfFcC7aFa25fC131e54c4E194eC9D97eAA1C62d9`|
-| [AnbeShivam NFT Contract](https://mumbai.polygonscan.com/token/0x28a3a80bF1A53653f85150cBB0BA2A3E3cb817Fc) | `0x28a3a80bF1A53653f85150cBB0BA2A3E3cb817Fc`|
+| [AnbeShivamMain Contract](https://stardust-explorer.metis.io/address/0x6A17D1b1E31A8473Fccf21b7FAB82757139520f1/transactions) | `0x6A17D1b1E31A8473Fccf21b7FAB82757139520f1` |
+| [GODS Token Contract](https://stardust-explorer.metis.io/address/0x0201049b94d6c407bB71745F5Adb8e329b4b39F8) | `0x0201049b94d6c407bB71745F5Adb8e329b4b39F8`|
+| [AnbeShivam NFT Contract](https://stardust-explorer.metis.io/address/0x4304EbCb0C6A37D289852aE21Ef5DFc64C5D0573/transactions) | `0x4304EbCb0C6A37D289852aE21Ef5DFc64C5D0573`|
 
 
 
@@ -37,13 +34,13 @@ A decentralized and completely transparent project funding platform which allows
 Clone the project
 
 ```bash
-  git clone git@github.com:crypticnfk/AnbeShivam.git
+  git clone git@github.com:crypticnfk/AnbeShivam-Metis.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd AnbeShivam
+  cd AnbeShivam-Metis
 
 ```
 
@@ -115,15 +112,6 @@ Contributions are what makes the open source community such an amazing place to 
  3. Commit your Changes (git commit -m 'Add some AmazingFeature')
  4.  Push to the Branch (git push origin feature/AmazingFeature)
  5. Open a Pull Request
-
-  
-## Authors
-
-- [@abhigamez](https://github.com/abhinav-TB)
-- [@crypticnfk](https://github.com/crypticnfk)
-- [Navneeth Ranjith](https://github.com/Navneeth87)
-- [@HishamHR5](https://github.com/HishamHR5)
-- [@aZrael936](https://github.com/aZrael936)
 
   
 ## Feedback
