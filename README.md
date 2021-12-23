@@ -55,7 +55,7 @@ Install dependencies
 Compile Smart Contracts
 
 ```bash
-  truffel Compile
+  truffle Compile
 ```
 
 Run ganache (a local block chain)
