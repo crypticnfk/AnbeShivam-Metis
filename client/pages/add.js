@@ -32,7 +32,6 @@ function AddContent() {
     const [loading, setLoading] = useState(false);
     const [inputs, setInputs] = useState({});
     const [file, updateFile] = useState(``);
-    const [url, updateUrl] = useState(``);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -49,9 +48,9 @@ function AddContent() {
         try {
             const added = await client.add(file);
             const pathUrl = `https://ipfs.infura.io/ipfs/${added.path}`;
-            updateUrl(pathUrl);
             await addContent(inputs.name, pathUrl);
             window.alert("Project added successfully");
+            window.location.href="/projects";
         } catch (error) {
             console.log('Error uploading file: ', error);
         }

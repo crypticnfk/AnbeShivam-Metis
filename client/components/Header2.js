@@ -46,9 +46,9 @@ export default function Header2() {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <Link href="/projects"><Nav.Link href="#features">Projects</Nav.Link></Link>
-                        <Link href="/nfts"><Nav.Link href="#pricing">My NFT'S</Nav.Link></Link>
-                        <Link href="/add"><Nav.Link href="#pricing">Add Project</Nav.Link></Link>
+                        <Link href="/projects"><Nav.Link href="/projects">Projects</Nav.Link></Link>
+                        <Link href="/nfts"><Nav.Link href="/nfts">My NFT'S</Nav.Link></Link>
+                        <Link href="/add"><Nav.Link href="/add">Add Project</Nav.Link></Link>
                     </Nav>
                     <Nav>
                         {

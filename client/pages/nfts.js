@@ -8,7 +8,6 @@ import {
 import {
     loadWeb3,
     loadBlockchainData,
-    checkInvestor,
     getNFTs,
     getTokenURI
 } from '../utils/web3-utils';
@@ -28,10 +27,7 @@ function Nfts() {
             await loadWeb3();
             const isConnected = await loadBlockchainData();
             setConnected(isConnected);
-            const isInvestor = await checkInvestor();
-            if (!isInvestor) {
-                window.location.href = "/";
-            }
+            
             const nfts = await getNFTs();
             let Nftms = [];
             for (var nft of nfts) {

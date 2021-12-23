@@ -23,7 +23,8 @@ function ProjectModal(props) {
                 </Modal.Header>
                 <center>
                 <br/>
-                <p style={{fontSize: 20, color: "crimson"}}>Funds Received: ${(props.project.receivedFunds*props.maticusd / 10**18).toFixed(2)}</p>
+                <p style={{fontSize: 20, color: "crimson"}}>Funds Received: {(props.project.receivedFunds / 10**18).toFixed(2)} METIS</p>
+                <p style={{fontSize: 20, color: "cornflowerblue"}}>Grant Funds: {(props.project.matchedFunds / 10**18).toFixed(2)} METIS</p>
                 <Modal.Body>
                 <h4>Project Pitch</h4>
                 <img style={{ alignSelf: 'center' }} alt="Not Available" src={props.project.fileURL} height="400" width="600" />
@@ -32,13 +33,13 @@ function ProjectModal(props) {
                 <h4>Choose an Amount</h4>
                 <RangeSlider
                     value={amount}
-                    min={2}
-                    max={1000}
+                    min={1}
+                    max={100}
                     tooltip='off'
                     onChange={event => setAmount(event.target.value)}
                 />
-                <p style={{fontSize: 20, color: "indigo"}}>${(amount*props.maticusd).toFixed(2)}</p>
-                <p style={{fontSize: 20, color: "indigo"}}>{amount} MATIC</p>
+                
+                <p style={{fontSize: 20, color: "indigo"}}>{amount} METIS</p>
                 <Button onClick={() => props.investInProject(amount)}>Invest in this Project</Button>
                 <br/><br/>
                 </center>

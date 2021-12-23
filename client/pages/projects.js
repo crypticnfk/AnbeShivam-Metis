@@ -12,11 +12,11 @@ import {
 import {
     loadWeb3,
     loadBlockchainData,
-    getProjectNames,
-    returnContent,
-    checkInvestor,
+    getProjects,
+    getAccountAddress,
     investFunds,
-    fetchLatestPrice
+    withdrawFunds,
+    getGODSBalance
 } from '../utils/web3-utils';
 import ProjectModal from '../components/modal';
 
@@ -26,10 +26,10 @@ function Projects() {
     const [web3, setweb3] = useContext(Context);
     const [connected, setConnected] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [account, setAccount] = useState("Not Connected");
     const [projects, setProjects] = useState([]);
     const [modalShow, setModalShow] = useState(false);
     const [chosenProject, chooseProject] = useState(null);
-    const [maticusd, setMaticusd] = useState(0);
 
     useEffect(async () => {
         if (web3) {
@@ -37,36 +37,54 @@ function Projects() {
             await loadWeb3();
             const isConnected = await loadBlockchainData();
             setConnected(isConnected);
-            const projectNames = await getProjectNames();
-            setProjects(projectNames);
-            const isInvestor = await checkInvestor();
-            if (!isInvestor) {
-                window.location.href = "/";
+            if(isConnected) {
+                const account = await getAccountAddress();
+                setAccount(account);
+                const projects = await getProjects();
+                setProjects(projects);
             }
-            setMaticusd(await fetchLatestPrice());
             setLoading(false);
         }
-    }, [web3]);
+    }, [web3, account]);
 
     const getProject = async (event) => {
         event.preventDefault();
 
         setLoading(true);
-        returnContent(event.target.value)
-            .then(result => {
-                if (result) {
-                    chooseProject(result);
-                    setModalShow(true);
-                }
-            })
+        chooseProject(projects[event.target.value]);
+        setModalShow(true);
+        setLoading(false);
+    }
+
+    const withdraw = async (event) => {
+        event.preventDefault();
+
+        setLoading(true);
+        await withdrawFunds(event.target.value);
         setLoading(false);
     }
 
     const investInProject = async (amount) => {
-        const metadata = {
-            name: "AnbeShivam Investor - Project " + chosenProject.name,
-            description: "Certificate of Investment in project " + chosenProject.name + " on the AnbeShivam Protocol",
-            image: "https://bafybeicwosh52j2xv7iyzp4azsvh6ejrih6y4lctb55fqtmhloihws4pba.ipfs.infura-ipfs.io/"
+        const GODSbalance = await getGODSBalance();
+        let metadata;
+        if (GODSbalance > 100) {
+            metadata = {
+                name: "AnbeShivam Gold NFT",
+                description: "Certified AnbeShivam Investor - Gold Tier",
+                image: "https://bafybeigkcsmj26lsn7vh4dwfadzz4wotswpfmno6ng3x7gury7ohsb7azq.ipfs.infura-ipfs.io/"
+            }
+        } else if (GODSbalance > 10) {
+            metadata = {
+                name: "AnbeShivam Silver NFT",
+                description: "Certified AnbeShivam Investor - Silver Tier",
+                image: "https://bafybeihkihzrr5zkwbpoyrs3miw32pvlo4pemvsyfoilbmdt5ionstidpi.ipfs.infura-ipfs.io/"
+            }
+        } else {
+            metadata = {
+                name: "AnbeShivam Bronze NFT",
+                description: "Certified AnbeShivam Investor - Bronze Tier",
+                image: "https://bafybeicbgjxx2ncfhe5u275u4s7hhfs6xiw775hgscbmboryg6qs7f6biq.ipfs.infura-ipfs.io/"
+            }
         }
         const metadataString = JSON.stringify(metadata);
         setLoading(true);
@@ -110,10 +128,15 @@ function Projects() {
                                     <center>
                                     <Card style={{ width: '30rem' }}>
                                         <Card.Header>
-                                            <h3>{project}</h3>
+                                            <h3>{project.name}</h3>
+                                            <h4>Votes Received: {project.votes.toString()}</h4>
                                         </Card.Header>
                                         <Card.Body>
                                             <Button id={key} value={key} variant="primary" onClick={getProject}>View Project Pitch</Button>
+                                            <br/><br/>
+                                            {project.creator.toUpperCase() === account.toUpperCase() &&
+                                            <Button id={key} value={key} variant="primary" onClick={withdraw}>Withdraw Projects Funds</Button>
+                                            }
                                         </Card.Body>
                                     </Card>
                                     </center>
@@ -122,7 +145,6 @@ function Projects() {
                             ))}
                             <ProjectModal
                                 show={modalShow}
-                                maticusd={maticusd}
                                 project={chosenProject}
                                 investInProject={(amount) => investInProject(amount)}
                                 onHide={() => setModalShow(false)}

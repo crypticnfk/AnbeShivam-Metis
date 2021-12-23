@@ -1,6 +1,6 @@
 # AnbeShivam
 
-A decentralized and completely transparent project funding platform which allows only accredited investors to access the platform content.
+A Decentralized platform using Quadratic Funding to manage Grants Programs for projects.
 
 ## Tech Stack Used
 

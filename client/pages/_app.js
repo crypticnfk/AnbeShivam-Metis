@@ -13,9 +13,7 @@ function MyApp({ Component, pageProps }) {
   useEffect(async() => {
     const web3Connected = await loadWeb3();
     setweb3(web3Connected);
-  },[web3]);
-
-  
+  },[web3]);  
 
   return (
     <Context.Provider value={[web3, setweb3]}>
