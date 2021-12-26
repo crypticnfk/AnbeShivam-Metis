@@ -1,6 +1,6 @@
 # AnbeShivam
 
-A Decentralized platform using Quadratic Funding to manage Grants Programs for projects.
+A Decentralized Platform which uses Quadratic Funding to manage Grants Programs for projects.
 
 ## Tech Stack Used
 
@@ -41,11 +41,10 @@ Go to the project directory
 
 ```bash
   cd AnbeShivam-Metis
-
 ```
 
 
-### Setting up a local Block Chain Server
+### Setting up a local Blockchain
 Install dependencies
 
 ```bash
@@ -55,43 +54,40 @@ Install dependencies
 Compile Smart Contracts
 
 ```bash
-  truffle Compile
+  truffle compile
 ```
 
-Run ganache (a local block chain)
+Run ganache (spin up a local blockchain)
 
 ```bash
   ganache-cli
 ```  
 
-Run migrations to deploy the smart contracts to ganache
-
+Run migrations to deploy the smart contracts locally
 
 ```bash
   truffle migrate
 ```  
 
-### Setting up the client
+### Setting up the client App
  
 Go to the client directory
 
 ```bash
   cd client
-
 ```
 Install dependencies
 
 ```bash
   npm install
-
 ```
 
 Starting a dev server
 
 ```bash
   npm run dev
-
 ```
+
 Visit http://localhost:3000/ to view the app
 
 

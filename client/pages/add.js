@@ -94,6 +94,8 @@ function AddContent() {
 
                         <br/>
                         <button type="submit" className="btn btn-primary">Submit</button>
+                        <br/><br/>
+                        <p className="w3-text-grey">NOTE: You must stake an amount of 2 METIS to add your project.</p>
                     </form>
                 </div>
             );
